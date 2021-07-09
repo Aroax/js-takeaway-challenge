@@ -32,6 +32,7 @@ describe ('TakeAway', () => {
     addSeveralDishes();
     takeaway.select("chow mein");
     takeaway.select("prawn crackers");
+    console.log(takeaway.basket)
     expect(takeaway.totalBasket()).toEqual(6.99);
   });
 
