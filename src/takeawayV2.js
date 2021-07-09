@@ -28,8 +28,13 @@ class TakeAwayV2 {
   };
 
   remove(name) {
-    this.basket.pop(this.getDish(name));
-  }
+    for(let i=0; i<this.basket.length; i++) {
+      if ( this.basket[i].name === name ) {
+        this.basket.splice(i, 1);
+        break;
+      }
+    }
+  };
 
   showBasket() {
     return this.basket;
