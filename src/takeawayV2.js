@@ -15,8 +15,8 @@ class TakeAwayV2 {
     return this.menu;
   };
 
-  getDish(dishName) {
-    let result = this.menu.find(dish => {
+  getDish(dishName, menu=this.menu) {
+    let result = menu.find(dish => {
       return dish.name === dishName;
     });
     return result;
@@ -26,6 +26,10 @@ class TakeAwayV2 {
     // this.basket[dish] = this.menu[dish];
     this.basket.push(this.getDish(name));
   };
+
+  remove(name) {
+    this.basket.pop(this.getDish(name));
+  }
 
   showBasket() {
     return this.basket;

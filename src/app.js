@@ -1,46 +1,110 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const takeaway = new TakeAway();
+  const takeaway = new TakeAwayV2();
+  const noodles = new Dish("noodles", 3.50);
+  const prawnCrackers = new Dish("prawn crackers", 3.50);
+  const chowMein = new Dish("chow mein", 5);
+  const blackBean = new Dish("beef in black bean sauce", 7);
+
+
 
   let setupMenu = () => {
-    takeaway.addDish("DISH", "PRICE");
-    takeaway.addDish("chow mein", 5);
-    takeaway.addDish("fried rice", 3.50);
-    takeaway.addDish("prawn crackers", 1.99);
+    takeaway.addDish(noodles);
+    takeaway.addDish(prawnCrackers);
+    takeaway.addDish(chowMein);
+    takeaway.addDish(blackBean);
   };
   setupMenu();
 
   // let menuLength = (Object.keys(takeaway.menu)).length;
   // console.log(menuLength);
 
-  let array = [
-    ["Item", "Price"],
-    [1,2,3],
-    [3,4],
-    [5,6],
-    [7,8]
-    ];
+
 
     console.log('hello')
 
-  let makeTableHTML = () => {
+  const menu = document.getElementById("menu-container");
+  const basket = document.getElementById("basket");
+  const checkout = document.getElementById("checkout");
 
-    let menuLength = (Object.keys(takeaway.menu)).length;
-    // console.log(menuLength)
-    var result = "<table border=1>";
-    for(var i=0; i<menuLength; i++) {
-        result += "<tr>";
-        for(var j=0; j<2; j++){
-            result += "<td>"+takeaway.menu[Object.keys(takeaway.menu)[i]]+"</td>";
-        }
-        result += "</tr>";
-    }
-    result += "</table>";
+  let buildMenuTable = (fullMenu) => {
 
-    return result;
+    fullMenu.forEach( (dish) => {
+      let item = document.createElement("li");
+      let text = document.createTextNode(`${dish.name} - £${dish.price}`);
+
+      let button = document.createElement("button");
+      button.className = "btn btn-primary";
+      button.id = dish.name;
+      button.addEventListener('click', (e) => {
+        takeaway.select(e.target.id);
+        refreshBasket();
+        runningTotal();
+      });
+      let buttonText = document.createTextNode("Add ");
+      button.appendChild(buttonText);
+
+      item.appendChild(text);
+      item.appendChild(document.createElement("br"));
+      item.appendChild(button);
+
+      menu.appendChild(item);
+      menu.appendChild(document.createElement("br"));
+  });
+    };
+    buildMenuTable(takeaway.menu);
 
 
+  let refreshBasket = () => {
+    basket.innerHTML = '';
+
+    takeaway.showBasket().forEach((dish) => {
+    let item = document.createElement("li");
+    let text = document.createTextNode(`${dish.name} - £${dish.price}        `);
+
+    let button = document.createElement("button");
+    button.className = "btn btn-danger";
+    button.id = dish.name;
+    button.addEventListener('click', (e) => {
+      takeaway.remove(e.target.id);
+      refreshBasket();
+      runningTotal();
+    });
+    let buttonText = document.createTextNode("Remove ");
+
+    item.appendChild(text);
+    basket.appendChild(item);
+
+    button.appendChild(buttonText);
+    item.appendChild(button);
+    });
   };
-  document.getElementById("menu-table").innerHTML = makeTableHTML();
+
+  let runningTotal = () => {
+     checkout.innerHTML = `Your total is £${takeaway.totalBasket()}`;
+  };
+
+  //
+  //
+  //   let menuLength = menu.length;
+  //
+  //   var result = "<table border=1>";
+  //   for(var i=0; i<menuLength; i++) {
+  //
+  //
+  //
+  //       result += "<tr>";
+  //       for(var j=0; j<2; j++){
+  //           result += "<td>"+menu[i].name+"</td>";
+  //       }
+  //       result += "</tr>";
+  //   }
+  //   result += "</table>";
+  //
+  //   return result;
+  //
+  //
+  // };
+  // document.getElementById("menu-table").innerHTML = makeTableHTML(takeaway.menu);
 });
 
 
